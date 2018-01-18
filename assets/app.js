@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
   var config = {
     apiKey: "AIzaSyCAbowk_95R8-DrLyTpD-Y2BoaYIO6YSQ8",
     authDomain: "train-scheduler-1a0e5.firebaseapp.com",
@@ -30,20 +31,17 @@ $(document).ready(function() {
     $("#frequencyForm").val("")
   })
 
+
   //function to retrieve data
   database.ref().on("child_added", function(childSnapshot, prevChildKey) {
     console.log(childSnapshot.val());
-    // Store everything into a variable.
-    var trainName = childSnapshot.val().name;
-    var trainDest = childSnapshot.val().destination;
-    var trainFirst = childSnapshot.val().firstTrain;
-    var trainFrequency = childSnapshot.val().frequency;
-    console.log("name:", trainName)
-    console.log("destination:", trainDest)
-    console.log("first train time:", trainFirst)
-    console.log("frequency:", trainFrequency)
+    var db = childSnapshot.val()
+    renderTable(db)
+  })
+
+  function renderTable(db) {
     // convert time to minutes
-    var firstTrainInMins = moment.duration(trainFirst).asMinutes()
+    var firstTrainInMins = moment.duration(db.firstTrain).asMinutes()
     console.log("train time in minutes:", firstTrainInMins)
     // capture now and convert to military and then to minutes
     var now = moment()
@@ -59,7 +57,7 @@ $(document).ready(function() {
       nextTrainTimeinMins = firstTrainInMins
       minsAway = Math.abs(nextTrainTimeinMins - nowinMinutes)
     } else {
-      minsAway = trainFrequency - (diff % trainFrequency)
+      minsAway = db.frequency - (diff % db.frequency)
       nextTrainTimeinMins = nowinMinutes + minsAway
     }
     console.log("next train time in mins:", nextTrainTimeinMins)
@@ -67,15 +65,39 @@ $(document).ready(function() {
     // convert the next train time to military time format
     var nextTrainTime = moment().startOf('day').add(nextTrainTimeinMins, 'minutes').format("HH:mm")
     console.log("next train in 24h:", nextTrainTime)
-    // create the table display
     var tBody = $("tbody")
     var tRow = $("<tr>")
-    var nameTd = $("<td>").text(trainName)
-    var destinationTd = $("<td>").text(trainDest)
-    var frequencyTd = $("<td>").text(trainFrequency)
+    var nameTd = $("<td>").text(db.name)
+    var destinationTd = $("<td>").text(db.destination)
+    var frequencyTd = $("<td>").text(db.frequency)
     var nextArrivalTd = $("<td>").text(nextTrainTime)
     var minutesAwayTd = $("<td>").text(minsAway)
     tRow.append(nameTd, destinationTd, frequencyTd, nextArrivalTd, minutesAwayTd)
     tBody.append(tRow);
-  })
+  }
+
+  // function to update the train time change every minute
+  setInterval(function() {
+    var currentTime = moment().format("HH:mm:ss")
+    // if the minutes change, seconds should be at 00
+    if (currentTime.endsWith("00")) {
+      $("tbody").empty()
+      database.ref().on("child_added", function(childSnapshot, prevChildKey) {
+        var db = childSnapshot.val()
+        renderTable(db)
+      })
+    }
+  }, 1000)
+
+  // function to generate and initiate clock countdown flip
+  function countDownDisplay() {
+    var clock
+    // Instantiate a countdown FlipClock
+    clock = $('.clock').FlipClock({
+      clockFace: 'TwentyFourHourClock'
+    });
+  };
+
+  countDownDisplay()
+
 })

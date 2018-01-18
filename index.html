@@ -10,22 +10,35 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
   <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
   <script src="https://momentjs.com/downloads/moment.min.js"></script>
+  <script src="assets/flipclock.min.js"></script>
   <script src="assets/app.js"></script>
+  <link rel="stylesheet" type="text/css" href="assets/flipclock.css">
   <link rel="stylesheet" type="text/css" href="assets/style.css">
   <title>Train Scheduler</title>
 
 </head>
 <body>
+  <div class="wrapper">
   <!-- Jumbotron -->
-  <div class="jumbotron jumbotron-fluid justify-content-center">
+  <div class="jumbotron jumbotron-fluid text-align-center">
   <div class="container">
     <h1 class="display-4">Train Scheduler</h1>
     <p class="lead">A schedule for the train conductor</p>
   </div>
 </div>
 
+  <!-- show current time -->
+  <div class="container my-3">
+  <div class="card">
+  <div class="card-body text-align-center">
+    <h3>The time is now:</h3>
+    <div class="clock"></div>
+  </div>
+</div>
+</div>
+
 <!-- content current employee -->
-<div class="container">
+<div class="container mb-5">
   <div class="card mb-3">
     <div class="card-header">
       Current Train Schedule
@@ -64,17 +77,21 @@
   </div>
   <div class="form-group">
     <label for="fristTrain">First Train</label>
-    <input type="time" class="form-control" id="firstTrainForm" placeholder="HH:mm (please enter military time)">
+    <input type="time" class="form-control" id="firstTrainForm">
   </div>
   <div class="form-group">
     <label for="frequency">Frequency</label>
-    <input type="number" class="form-control" id="frequencyForm" placeholder="min">
+    <input type="number" class="form-control" id="frequencyForm" placeholder="in minutes">
   </div>
   <button type="submit" class="btn btn-primary submit">Submit</button>
   </form>
   </div>
 </div>
 
+</div>
+</div>
+<div class="container-fluid footer text-center mt-2">
+  &copy Copyright 2018 Angela Kressin
 </div>
 </body>
 </html>
