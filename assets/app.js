@@ -24,7 +24,7 @@ $(document).ready(function() {
       firstTrain: firstTrain,
       frequency: frequency
     })
-    alert("Employee successfully added")
+    alert("Train successfully added")
     $("#trainNameForm").val("")
     $("#destinationForm").val("")
     $("#firstTrainForm").val("")
